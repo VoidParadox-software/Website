@@ -1,0 +1,83 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "usecase-enthusiast",
+      "description": "A person using a complex smart home dashboard on a tablet.",
+      "imageUrl": "https://picsum.photos/seed/101/600/400",
+      "imageHint": "smart home dashboard"
+    },
+    {
+      "id": "usecase-family",
+      "description": "A family enjoying a movie night in their living room with ambient lighting.",
+      "imageUrl": "https://picsum.photos/seed/102/600/400",
+      "imageHint": "family living room"
+    },
+    {
+      "id": "usecase-developer",
+      "description": "The exterior of a modern apartment building at dusk.",
+      "imageUrl": "https://picsum.photos/seed/103/600/400",
+      "imageHint": "modern apartment building"
+    },
+    {
+        "id": "accessory-light-strip",
+        "description": "A vibrant LED light strip under a desk.",
+        "imageUrl": "https://picsum.photos/seed/201/600/400",
+        "imageHint": "LED light strip"
+    },
+    {
+        "id": "accessory-smart-plug",
+        "description": "A smart plug in a wall socket with a lamp plugged into it.",
+        "imageUrl": "https://picsum.photos/seed/202/600/400",
+        "imageHint": "smart plug"
+    },
+    {
+        "id": "accessory-sensor",
+        "description": "A small multi-sensor placed on a bookshelf.",
+        "imageUrl": "https://picsum.photos/seed/203/600/400",
+        "imageHint": "smart sensor"
+    },
+    {
+        "id": "accessory-smart-switch",
+        "description": "A sleek, modern smart light switch on a wall.",
+        "imageUrl": "https://picsum.photos/seed/204/600/400",
+        "imageHint": "smart light switch"
+    },
+    {
+        "id": "accessory-smart-camera",
+        "description": "An indoor security camera on a shelf.",
+        "imageUrl": "https://picsum.photos/seed/205/600/400",
+        "imageHint": "security camera"
+    },
+    {
+        "id": "accessory-thermostat",
+        "description": "A circular smart thermostat mounted on a wall.",
+        "imageUrl": "https://picsum.photos/seed/206/600/400",
+        "imageHint": "smart thermostat"
+    },
+    {
+      "id": "module-lighting",
+      "description": "Abstract visualization of smart lighting control interface.",
+      "imageUrl": "https://picsum.photos/seed/301/600/400",
+      "imageHint": "smart lighting"
+    },
+    {
+      "id": "module-climate",
+      "description": "A sleek interface showing temperature and humidity control.",
+      "imageUrl": "https://picsum.photos/seed/302/600/400",
+      "imageHint": "climate control"
+    },
+    {
+      "id": "module-security",
+      "description": "A dashboard showing security camera feeds and sensor status.",
+      "imageUrl": "https://picsum.photos/seed/303/600/400",
+      "imageHint": "home security"
+    },
+    {
+      "id": "module-entertainment",
+      "description": "Living room with synchronized ambient lighting and music visualization.",
+      "imageUrl": "https://picsum.photos/seed/304/600/400",
+      "imageHint": "home entertainment"
+    }
+  ]
+}
