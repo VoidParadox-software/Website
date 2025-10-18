@@ -1,11 +1,11 @@
+"use client";
 
-'use client';
-
-import './globals.css';
+import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import Starfield from '@/components/starfield';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { useEffect } from 'react';
+import Starfield from "@/components/starfield";
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import { useEffect } from "react";
+import { AuthProvider } from "@/context/AuthContext";
 
 /**
  * @file This file defines the root layout for the entire application.
@@ -26,15 +26,16 @@ function InteractiveBackground() {
       mouseX.set(event.clientX);
       mouseY.set(event.clientY);
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, [mouseX, mouseY]);
 
   const background = useTransform(
     [mouseX, mouseY],
-    ([newX, newY]) => `radial-gradient(600px at ${newX}px ${newY}px, hsl(var(--primary) / 0.15), transparent 80%)`
+    ([newX, newY]) =>
+      `radial-gradient(600px at ${newX}px ${newY}px, hsl(var(--primary) / 0.15), transparent 80%)`
   );
 
   return <motion.div className="fixed inset-0 -z-10" style={{ background }} />;
@@ -57,19 +58,37 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <title>VoidParadox: Cierra Smart Home</title>
-        <meta name="description" content="Fill the void in your home with Cierra, the smart home assistant that learns your habits." />
+        <meta
+          name="description"
+          content="Fill the void in your home with Cierra, the smart home assistant that learns your habits."
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body className="font-body antialiased relative">
-        <Starfield />
-        <InteractiveBackground />
-        <div className="absolute top-0 left-0 w-full h-full -z-20 bg-gradient-to-br from-background via-transparent to-blue-500/5"></div>
-        {children}
-        <Toaster />
+        <AuthProvider>
+          <Starfield />
+          <InteractiveBackground />
+          <div className="absolute top-0 left-0 w-full h-full -z-20 bg-gradient-to-br from-background via-transparent to-blue-500/5"></div>
+          {children}
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );

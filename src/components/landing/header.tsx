@@ -1,11 +1,21 @@
-
-'use client';
+"use client";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Menu, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+import MiniCart from "@/components/common/MiniCart";
 
 /**
  * @file This file defines the global header for the website.
@@ -47,6 +57,17 @@ const navLinks = [
  */
 export default function Header() {
   const [isSheetOpen, setSheetOpen] = useState(false);
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   return (
     <header className="fixed top-0 z-50 w-full p-2 sm:p-4">
@@ -57,42 +78,102 @@ export default function Header() {
           </Link>
         </div>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          {navLinks.map(link => (
-             <Link key={link.href} href={link.href} className="transition-colors hover:text-primary">{link.label}</Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="transition-colors hover:text-primary"
+            >
+              {link.label}
+            </Link>
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Button asChild className="hidden sm:inline-flex">
-            <Link href="/#pricing">Pre-order Now</Link>
-          </Button>
+          <div className="hidden sm:flex items-center gap-2">
+            {loading ? (
+              <Skeleton className="h-10 w-24" />
+            ) : user ? (
+              <>
+                <MiniCart />
+                <Button variant="ghost" onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" asChild>
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </>
+            )}
+          </div>
           <div className="md:hidden">
-             <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-                <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                        <Menu className="h-6 w-6" />
-                        <span className="sr-only">Open menu</span>
-                    </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[240px]">
-                    <SheetTitle className="sr-only">Mobile Navigation Menu</SheetTitle>
-                    <div className="flex flex-col items-center h-full pt-16">
-                        <nav className="flex flex-col items-center gap-6">
-                             {navLinks.map(link => (
-                                <Link 
-                                    key={link.href} 
-                                    href={link.href} 
-                                    className="text-lg font-medium transition-colors hover:text-primary"
-                                    onClick={() => setSheetOpen(false)}
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
-                        </nav>
-                         <Button asChild className="mt-8">
-                            <Link href="/#pricing" onClick={() => setSheetOpen(false)}>Pre-order Now</Link>
+            <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[240px]">
+                <SheetTitle className="sr-only">
+                  Mobile Navigation Menu
+                </SheetTitle>
+                <div className="flex flex-col items-center h-full pt-16">
+                  <nav className="flex flex-col items-center gap-6">
+                    {navLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="text-lg font-medium transition-colors hover:text-primary"
+                        onClick={() => setSheetOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </nav>
+                  <div className="mt-8 flex flex-col items-center gap-4 w-full px-4">
+                    {loading ? (
+                      <Skeleton className="h-10 w-full" />
+                    ) : user ? (
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          handleLogout();
+                          setSheetOpen(false);
+                        }}
+                        className="w-full"
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </Button>
+                    ) : (
+                      <>
+                        <Button variant="ghost" asChild className="w-full">
+                          <Link
+                            href="/login"
+                            onClick={() => setSheetOpen(false)}
+                          >
+                            Login
+                          </Link>
                         </Button>
-                    </div>
-                </SheetContent>
+                        <Button asChild className="w-full">
+                          <Link
+                            href="/signup"
+                            onClick={() => setSheetOpen(false)}
+                          >
+                            Sign Up
+                          </Link>
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </SheetContent>
             </Sheet>
           </div>
         </div>
