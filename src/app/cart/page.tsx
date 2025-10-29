@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Plus, Minus, Trash2, Loader2 } from "lucide-react";
+import { loadStripe } from "@stripe/stripe-js";
 import { useToast } from "@/hooks/use-toast";
 
 interface CartItem {
@@ -26,6 +27,59 @@ export default function CartPage() {
   const { toast } = useToast();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+  const handleCheckout = async () => {
+    if (!user) return;
+    setIsCheckingOut(true);
+
+    try {
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ items: cartItems, email: user.email }),
+      });
+
+      const { id } = await response.json();
+      const stripe = await loadStripe(
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+      );
+      if (stripe) {
+        await stripe.redirectToCheckout({ sessionId: id });
+      }
+    } catch (error) {
+      console.error("Failed to create checkout session", error);
+      toast({
+        title: "Error",
+        description: "Failed to create checkout session. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsCheckingOut(false);
+    }
+  };
+
+  useEffect(() => {
+    if (window.location.search.includes("success=true")) {
+      toast({
+        title: "Payment Successful!",
+        description: "Your order has been placed.",
+      });
+      // Clear the cart
+      if (user) {
+        const cartRef = doc(db, "carts", user.uid);
+        updateDoc(cartRef, { items: [] });
+      }
+    } else if (window.location.search.includes("canceled=true")) {
+      toast({
+        title: "Payment Canceled",
+        description: "Your order has been canceled.",
+        variant: "destructive",
+      });
+    }
+  }, [user, toast]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -176,7 +230,14 @@ export default function CartPage() {
                       <span>Total</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
-                    <Button className="w-full" disabled>
+                    <Button
+                      className="w-full"
+                      onClick={handleCheckout}
+                      disabled={cartItems.length === 0 || isCheckingOut}
+                    >
+                      {isCheckingOut && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
                       Proceed to Checkout
                     </Button>
                   </CardContent>
