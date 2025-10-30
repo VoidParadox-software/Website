@@ -1,7 +1,8 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
-import { placeholderImages } from "@/lib/placeholder-images.json";
+import imageData from "@/lib/placeholder-images.json";
+const { placeholderImages } = imageData;
 import { Card, CardContent } from "@/components/ui/card";
 import { Building, Home, Smartphone } from "lucide-react";
 

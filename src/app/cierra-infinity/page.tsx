@@ -2,7 +2,8 @@
 import Footer from "@/components/landing/footer";
 import Header from "@/components/landing/header";
 import { Button } from "@/components/ui/button";
-import { placeholderImages } from "@/lib/placeholder-images.json";
+import imageData from "@/lib/placeholder-images.json";
+const { placeholderImages } = imageData;
 import { ArrowRight, CheckCircle, Headphones, Sparkles, Wrench } from "lucide-react";
 import Image from "next/image";
 

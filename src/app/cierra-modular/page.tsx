@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { placeholderImages } from "@/lib/placeholder-images.json";
+import imageData from "@/lib/placeholder-images.json";
+const { placeholderImages } = imageData;
 import { Layers, Minus, Package, Plus, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 
